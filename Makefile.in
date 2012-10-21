@@ -27,6 +27,10 @@ export man1dir
 
 
 
+
+
+
+
 all clean install uninstall tiptop:
 	cd src && $(MAKE) $@
 
