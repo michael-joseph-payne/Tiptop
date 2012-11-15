@@ -550,9 +550,41 @@ static screen_t* branch_pred_screen()
   return s;
 }
 
+static screen_t* project_screen()
+{
+  screen_t* s = new_screen("Project", "Project Screen", 1);
 
+    /* setup counters */
+  add_counter_by_value(s, "CYCLE", PERF_COUNT_HW_CPU_CYCLES,    PERF_TYPE_HARDWARE);
+  add_counter_by_value(s, "INSN",  PERF_COUNT_HW_INSTRUCTIONS,  PERF_TYPE_HARDWARE);
+  add_counter_by_value(s, "MISS",  PERF_COUNT_HW_CACHE_MISSES,  PERF_TYPE_HARDWARE);
+  add_counter_by_value(s, "BR",    PERF_COUNT_HW_BRANCH_MISSES, PERF_TYPE_HARDWARE);
+  add_counter_by_value(s, "BUS",   PERF_COUNT_HW_BUS_CYCLES,    PERF_TYPE_HARDWARE);
+
+  /* add columns */
+  add_column(s, " %CPU", "%5.1f", "Total CPU usage", "CPU_TOT");
+  add_column(s, " %SYS", "%5.1f", "System CPU usage", "CPU_SYS");
+  add_column(s, "   P", "  %2.0f", "Processor where last seen", "PROC_ID");
+  add_column(s, "  Mcycle", "%8.2f", "Cycles (millions)",
+             "delta(CYCLE) / 1e6");
+  add_column(s, "  Minstr", "%8.2f", "Instructions (millions)",
+             "delta(INSN) / 1e6");
+  add_column(s, "  IPC",     " %4.2f", "Executed instructions per cycle",
+             "delta(INSN)/delta(CYCLE)");
+  add_column(s, " %MISS",   "%6.2f", "Cache miss per 100 instructions",
+             "100*delta(MISS)/delta(INSN)");
+  add_column(s, " %BMIS",   "%6.2f", "Mispredicted branches per 100 instructions",
+             "100*delta(BR)/delta(INSN)");
+  add_column(s, " %BUS",    "%5.1f", "Bus cycles per executed instruction",
+             "delta(BUS)/delta(INSN)");
+  add_column(s, "%POWER",   "%5.1f", "Power consumed ny the process",
+             "delta(BUS)/delta(INSN)");
+
+  return s;
+}
 void init_screen()
 {
+  project_screen();
   branch_pred_screen();
   default_screen();
 

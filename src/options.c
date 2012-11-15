@@ -57,6 +57,7 @@ static void usage(const char* name)
   fprintf(stderr, "\t--version      print legalese and exit\n");
   fprintf(stderr, "\t-W path        Used configuration file pointed by path\n");
   fprintf(stderr, "\t-w pid|name    watch this process (highlighted)\n");
+  fprintf(stderr, "\t-m             power mode for project\n");
   return;
 }
 
@@ -366,6 +367,11 @@ void parse_command_line(int argc, char* argv[],
       /* error case already handled by previous function */
       i++;
       continue;
+    }
+
+    if(strcmp(argv[i], "-m") == 0) {
+     *screen_num=2;
+     continue;
     }
 
     if (strstr(argv[0], "ptiptop")) {
